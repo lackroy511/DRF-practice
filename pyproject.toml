@@ -26,6 +26,7 @@ flake8-clean-block = "^0.1.2"
 flake8-indent-in-def = "^0.1.2"
 flake8-newspaper-style = "^0.4.3"
 flake8-return = "^1.2.0"
+flake8-length = "^0.3.1"
 
 [build-system]
 requires = ["poetry-core"]

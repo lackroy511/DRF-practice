@@ -9,7 +9,15 @@ class Course(models.Model):
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
 
-    name = models.CharField(max_length=150, verbose_name='Название курса')
-    description = models.TextField(verbose_name='Описание курса')
-    image = models.ImageField(upload_to='course_img_preview', null=True,
-                              blank=True, verbose_name='Изображение курса')
+    name = models.CharField(
+        max_length=150, verbose_name='Название курса',
+    )
+    description = models.TextField(
+        verbose_name='Описание курса',
+    )
+    image = models.ImageField(
+        upload_to='course_img_preview', null=True, blank=True, verbose_name='Изображение курса',
+    )
+
+    def __str__(self):
+        return f'Курс: {self.name}'

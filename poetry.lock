@@ -159,6 +159,23 @@ files = [
 flake8 = ">=4"
 
 [[package]]
+name = "flake8-length"
+version = "0.3.1"
+description = "Flake8 plugin for a smart line length validation."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "flake8-length-0.3.1.tar.gz", hash = "sha256:0ebd614c25361b54937335c9b143cc18562cd4da48024d48f79bf15ec453b510"},
+    {file = "flake8_length-0.3.1-py3-none-any.whl", hash = "sha256:73b5e974957575b87b5df55ddfe71e52f3806fb9d6a6b6b5cddceeff77800e4c"},
+]
+
+[package.dependencies]
+flake8 = "*"
+
+[package.extras]
+dev = ["isort", "mypy", "pytest"]
+
+[[package]]
 name = "flake8-multiline-containers"
 version = "0.0.19"
 description = "Ensure a consistent format for multiline containers."
@@ -415,4 +432,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b3eaa890444806dda37dd987bcc0edeaa4a97f7b4fbea18fcb45436635b8de3d"
+content-hash = "08bb9aa7fb1463ebfee95e971f6d81b7fcf78ab937ff90d93fb5792373cac115"
