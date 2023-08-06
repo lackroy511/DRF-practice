@@ -1,6 +1,6 @@
-from django.db import models
-
 from course.models import Course
+
+from django.db import models
 
 
 class Lesson(models.Model):
@@ -23,7 +23,7 @@ class Lesson(models.Model):
     )
     course = models.ForeignKey(
         Course, verbose_name='Курс', on_delete=models.CASCADE,
-        null=True, blank=True, related_name='course',
+        null=True, blank=True, related_name='lessons',
     )
 
     def __str__(self):

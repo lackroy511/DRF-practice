@@ -2,5 +2,6 @@
 exclude = config/settings.py
 extend-ignore =
     E501,
-    W505
+    W505,
+    F401
 max-line-length = 79

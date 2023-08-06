@@ -1,6 +1,6 @@
-from rest_framework import serializers
-
 from lesson.models import Lesson
+
+from rest_framework import serializers
 
 
 class LessonSerializer(serializers.ModelSerializer):
