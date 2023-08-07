@@ -1,9 +1,7 @@
-from course.models import Course
+from course.models import Course, Lesson
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
-from lesson.models import Lesson
 
 
 # Create your models here.
