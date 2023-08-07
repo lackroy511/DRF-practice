@@ -1,13 +1,11 @@
 from django.shortcuts import render
-
 from django_filters.rest_framework import DjangoFilterBackend
-
 from rest_framework import generics
 from rest_framework.filters import OrderingFilter
 
 from users.models import Payment, User
-from users.serializers import PaymentSerializer, UserRetrieveSerializer, \
-    UserSerializer
+from users.serializers import (PaymentSerializer, UserRetrieveSerializer,
+                               UserSerializer)
 
 
 class UserUpdateAPIView(generics.UpdateAPIView):
