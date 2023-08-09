@@ -13,8 +13,8 @@ router = DefaultRouter()
 router.register(r'course', CourseViewSet, basename='course')
 
 urlpatterns = [
-    path("lesson/", LessonCreateAPIView.as_view(), name="lesson-create"),
-    path("lesson/list/", LessonListAPIView.as_view(), name="lesson-list"),
+    path("lesson/create/", LessonCreateAPIView.as_view(), name="lesson-create"),
+    path("lesson/", LessonListAPIView.as_view(), name="lesson-list"),
     path("lesson/<int:pk>/", LessonRetrieveAPIView.as_view(), name="lesson"),
     path("lesson/update/<int:pk>/", LessonUpdateAPIView.as_view(), name="lesson-update"),
     path("lesson/delete/<int:pk>/", LessonDestroyAPIView.as_view(), name="lesson-delete"),

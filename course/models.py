@@ -18,6 +18,10 @@ class Course(models.Model):
     image = models.ImageField(
         upload_to='course_img_preview', null=True, blank=True, verbose_name='Изображение курса',
     )
+    owner = models.ForeignKey(
+        'users.User', verbose_name='владелец',
+        on_delete=models.CASCADE, blank=True, null=True,
+    )
 
     def __str__(self):
         return f'Курс: {self.name}'
@@ -44,6 +48,10 @@ class Lesson(models.Model):
     course = models.ForeignKey(
         Course, verbose_name='Курс', on_delete=models.CASCADE,
         null=True, blank=True, related_name='lessons',
+    )
+    owner = models.ForeignKey(
+        'users.User', verbose_name='владелец',
+        on_delete=models.CASCADE, null=True, blank=True,
     )
 
     def __str__(self):
