@@ -5,7 +5,6 @@ from users.views import (MyTokenObtainPairView, PaymentsListAPIView,
                          UserCreateAPIView, UserRetrieveAPIView,
                          UserUpdateAPIView)
 
-
 app_name = UsersConfig.name
 
 urlpatterns = [

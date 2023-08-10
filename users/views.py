@@ -1,14 +1,18 @@
-from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
+from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from course.permissions import IsCurrentUser, IsOwner
 from users.models import Payment, User
-from users.serializers import (MyTokenObtainPairSerializer, PaymentSerializer,
-                               UserRetrieveSerializer, UserSerializer)
+from users.serializers import (
+    MyTokenObtainPairSerializer,
+    OtherUserRetrieveSerializer, PaymentSerializer,
+    UserRetrieveSerializer, UserSerializer,
+)
 
 
 class UserCreateAPIView(generics.CreateAPIView):
@@ -28,14 +32,21 @@ class UserCreateAPIView(generics.CreateAPIView):
 
 class UserUpdateAPIView(generics.UpdateAPIView):
 
-    serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = (IsCurrentUser, )
 
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
 
-    serializer_class = UserRetrieveSerializer
+    # serializer_class = UserRetrieveSerializer
     queryset = User.objects.all()
+
+    def get_serializer_class(self):
+
+        if self.request.user == self.get_object():
+            return UserRetrieveSerializer
+
+        return OtherUserRetrieveSerializer
 
 
 class PaymentsListAPIView(generics.ListAPIView):

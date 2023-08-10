@@ -23,11 +23,20 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'email', 'first_name', 'last_name', 'is_staff',
+            'email', 'password', 'first_name', 'last_name', 'is_staff',
             'is_active', 'date_joined', 'payments',
         )
 
     payments = PaymentSerializer(many=True)
+
+
+class OtherUserRetrieveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'email', 'first_name', 'is_staff', 'is_active', 'date_joined',
+        )
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

@@ -23,3 +23,13 @@ class CanCreate(BasePermission):
             return False
 
         return True
+
+
+class IsCurrentUser(BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.user == obj:
+
+            return True
+
+        return False
