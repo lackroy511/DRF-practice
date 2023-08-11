@@ -30,7 +30,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         elif self.action == 'destroy':
             permission_classes = (CanCreate, IsOwner)
 
-        elif self.action == "update" or self.action == "partial_update":
+        elif self.action == 'update' or self.action == 'partial_update':
             permission_classes = (IsModerator | IsOwner, )
 
         return [permission() for permission in permission_classes]
