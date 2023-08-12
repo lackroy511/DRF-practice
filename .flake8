@@ -3,7 +3,8 @@ exclude = config/settings.py
 extend-ignore =
     E501,
     W505,
-    F401
+    F401,
+    W293
 max-line-length = 79
 inline-quotes = single
 multiline-quotes = single

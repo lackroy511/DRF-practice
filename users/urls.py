@@ -18,6 +18,6 @@ urlpatterns = [
 
     path('payments/', PaymentsListAPIView.as_view(), name='user-payments'),
 
-    path('sub/', SubscriptionCreateAPIView.as_view(), name='user-sub-create'),
+    path('sub/create/', SubscriptionCreateAPIView.as_view(), name='user-sub-create'),
     path('sub/delete/<int:pk>/', SubscriptionDestroyAPIView.as_view(), name='user-sub-delete'),
 ]

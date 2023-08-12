@@ -13,7 +13,7 @@ class VideoURLValidator:
 
         url = dict(fields).get(self.field_name)
 
-        if 'youtube.com' not in url:
+        if url is not None and 'youtube.com' not in url:
             raise ValidationError('Не правильный url')
 
 

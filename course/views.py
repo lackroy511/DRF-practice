@@ -1,6 +1,6 @@
 # from django.shortcuts import render
 from rest_framework import generics, viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from course.models import Course, Lesson
 from course.pagination import MyPagination
@@ -41,7 +41,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
 
-    permission_classes = (CanCreate, )
+    permission_classes = (CanCreate, AllowAny)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
