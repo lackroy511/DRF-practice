@@ -3,12 +3,14 @@ from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from course.models import Course, Lesson
+from course.pagination import MyPagination
 from course.permissions import CanCreate, IsModerator, IsOwner
 from course.serializers import CourseSerializer, LessonSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
+    pagination_class = MyPagination
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -47,7 +49,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
-    # queryset = Lesson.objects.all()
+    pagination_class = MyPagination
 
     def get_queryset(self):
 

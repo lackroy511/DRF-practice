@@ -1,8 +1,9 @@
 
 from collections import OrderedDict
-from rest_framework import serializers
-from course.models import Course
 
+from rest_framework import serializers
+
+from course.models import Course
 from users.models import Subscription, User
 
 

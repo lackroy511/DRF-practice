@@ -2,8 +2,9 @@ from django.urls import path
 
 from users.apps import UsersConfig
 from users.views import (MyTokenObtainPairView, PaymentsListAPIView,
-                         SubscriptionCreateAPIView, SubscriptionDestroyAPIView, UserCreateAPIView,
-                         UserRetrieveAPIView, UserUpdateAPIView)
+                         SubscriptionCreateAPIView, SubscriptionDestroyAPIView,
+                         UserCreateAPIView, UserRetrieveAPIView,
+                         UserUpdateAPIView)
 
 
 app_name = UsersConfig.name
@@ -18,5 +19,5 @@ urlpatterns = [
     path('payments/', PaymentsListAPIView.as_view(), name='user-payments'),
 
     path('sub/', SubscriptionCreateAPIView.as_view(), name='user-sub-create'),
-    path('sub/delete/<int:pk>/', SubscriptionDestroyAPIView.as_view(), name='user-sub-destroy'),
+    path('sub/delete/<int:pk>/', SubscriptionDestroyAPIView.as_view(), name='user-sub-delete'),
 ]
