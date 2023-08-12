@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from users.models import Payment, User
+from users.models import Payment, Subscription, User
 
 # Register your models here.
 
@@ -14,3 +14,8 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('date_of_payment', 'amount')
+
+
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('course_name', 'course', 'user')

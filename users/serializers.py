@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from users.models import Payment, User
+from users.models import Payment, Subscription, User
+from users.validators import AlreadySubscribedCheck
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -48,3 +49,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
 
         return token
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subscription
+        fields = ('course', 'user', 'course_name')
+        validators = [AlreadySubscribedCheck()]

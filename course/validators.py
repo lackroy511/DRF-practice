@@ -1,4 +1,5 @@
 from collections import OrderedDict
+
 from rest_framework.serializers import ValidationError
 from validators.url import url as is_url
 

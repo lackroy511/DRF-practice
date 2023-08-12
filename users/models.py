@@ -60,3 +60,30 @@ class Payment(models.Model):
         User, verbose_name='пользователь', on_delete=models.CASCADE,
         related_name='payments',
     )
+
+
+class Subscription(models.Model):
+
+    class Meta:
+        verbose_name = 'подписка на курс'
+        verbose_name_plural = 'подписки на курс'
+
+    course_name = models.CharField(
+        max_length=255, verbose_name='название курса', null=True, blank=True,
+    )
+    course = models.ForeignKey(
+        'course.Course', verbose_name='курс', on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
+    user = models.ForeignKey(
+        'users.User', verbose_name='пользователь', on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
+
+    def __str__(self):
+        return f'{self.course} {self.user}'
+
+    def save(self, *args, **kwargs):
+        self.course_name = self.course.name
+
+        return super(Subscription, self).save(*args, **kwargs)

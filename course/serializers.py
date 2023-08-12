@@ -21,7 +21,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = (
-            'id', 'name', 'description', 'image', 'video_url', 'amount_of_lessons', 'lessons', 'owner',
+            'id', 'name', 'description', 'image', 'video_url', 'amount_of_lessons', 'lessons', 'owner', 'is_subscribed',
         )
 
         validators = [
@@ -31,6 +31,14 @@ class CourseSerializer(serializers.ModelSerializer):
 
     lessons = LessonSerializer(many=True, required=False)
     amount_of_lessons = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField()
 
     def get_amount_of_lessons(self, obj):
         return obj.lessons.count()
+
+    def get_is_subscribed(self, obj):
+        # Если у текущего курса есть подписка с текущем пользователем:
+        if obj.subscriptions.filter(user=self.context['request'].user).exists():
+            return True
+
+        return False

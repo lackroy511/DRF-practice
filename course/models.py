@@ -1,3 +1,4 @@
+
 from django.db import models
 
 # Create your models here.
@@ -10,13 +11,13 @@ class Course(models.Model):
         verbose_name_plural = 'Курсы'
 
     name = models.CharField(
-        max_length=150, verbose_name='Название курса',
+        max_length=150, verbose_name='название курса',
     )
     description = models.TextField(
         verbose_name='Описание курса',
     )
     image = models.ImageField(
-        upload_to='course_img_preview', null=True, blank=True, verbose_name='Изображение курса',
+        upload_to='course_img_preview', null=True, blank=True, verbose_name='изображение курса',
     )
     video_url = models.URLField(
         max_length=250, verbose_name='url на видео', null=True, blank=True,
@@ -37,13 +38,13 @@ class Lesson(models.Model):
         verbose_name_plural = 'Уроки'
 
     name = models.CharField(
-        max_length=150, verbose_name='Название курса',
+        max_length=150, verbose_name='название курса',
     )
     description = models.TextField(
-        verbose_name='Описание курса',
+        verbose_name='описание курса',
     )
     image = models.ImageField(
-        upload_to='course_img_preview', null=True, blank=True, verbose_name='Изображение курса',
+        upload_to='course_img_preview', null=True, blank=True, verbose_name='изображение курса',
     )
     video_url = models.URLField(
         max_length=250, verbose_name='url на видео', null=True, blank=True,
