@@ -1,9 +1,8 @@
 from django.test import TestCase
-
-from rest_framework.test import APITestCase
 from rest_framework import status
-from course.models import Course, Lesson
+from rest_framework.test import APITestCase
 
+from course.models import Course, Lesson
 from users.models import User
 
 # Create your tests here.

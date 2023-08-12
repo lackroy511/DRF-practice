@@ -1,6 +1,6 @@
 # from django.shortcuts import render
 from rest_framework import generics, viewsets
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from course.models import Course, Lesson
 from course.pagination import MyPagination
