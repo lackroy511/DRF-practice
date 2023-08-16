@@ -15,7 +15,7 @@ urlpatterns = [
 
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 
-    path('payments/', PaymentsListAPIView.as_view(), name='user-payments'),
+    path('payment/', PaymentsListAPIView.as_view(), name='user-payment'),
 
     path('sub/create/', SubscriptionCreateAPIView.as_view(), name='user-sub-create'),
     path('sub/delete/<int:pk>/', SubscriptionDestroyAPIView.as_view(), name='user-sub-delete'),

@@ -45,9 +45,13 @@ class Payment(models.Model):
     amount = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name='Сумма платежа',
     )
+    # pk = models.CharField(
+    #     max_length=255, primary_key=True, editable=False,
+    # )
     method = models.CharField(
         max_length=50, choices=METHOD_CHOICES,
     )
+    
     paid_lesson = models.ForeignKey(
         Lesson, verbose_name='Оплаченный урок', on_delete=models.CASCADE,
         null=True, blank=True, related_name='paid_lessons',
@@ -60,7 +64,7 @@ class Payment(models.Model):
         User, verbose_name='пользователь', on_delete=models.CASCADE,
         related_name='payments',
     )
-
+    
 
 class Subscription(models.Model):
 
