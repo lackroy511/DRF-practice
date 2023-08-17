@@ -1,15 +1,14 @@
 
 import os
-from django.shortcuts import redirect
 
 import stripe
+from django.shortcuts import redirect
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from course.models import Course, Lesson
 from course.permissions import IsCurrentUser
 from users.models import Payment, Subscription, User
 from users.serializers import (MyTokenObtainPairSerializer,
@@ -17,6 +16,9 @@ from users.serializers import (MyTokenObtainPairSerializer,
                                PaymentCreateSerializer, PaymentSerializer,
                                SubscriptionSerializer, UserRetrieveSerializer,
                                UserSerializer)
+from users.services import (get_session_of_payment,
+                            get_stripe_data,
+                            save_serializer)
 
 
 class UserCreateAPIView(generics.CreateAPIView):
@@ -42,7 +44,6 @@ class UserRetrieveAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
 
     def get_serializer_class(self):
-
         if self.request.user == self.get_object():
             return UserRetrieveSerializer
 
@@ -64,50 +65,8 @@ class PaymentCreateAPIView(generics.CreateAPIView):
     serializer_class = PaymentCreateSerializer
     
     def perform_create(self, serializer):
-        
-        stripe.api_key = os.getenv('STRIPE_TOKEN')
-
-        amount = self.request.data.get('amount')
-        paid_lesson_id = self.request.data.get('paid_lesson')
-        paid_course_id = self.request.data.get('paid_course')
-        
-        paid_obj = None
-        if paid_course_id:
-            paid_obj = Course.objects.get(pk=paid_course_id)
-        elif paid_lesson_id:
-            paid_obj = Lesson.objects.get(pk=paid_lesson_id)
-        
-        if paid_obj:
-            stripe_product = stripe.Product.create(
-                name=paid_obj.name,
-            )
-        
-            stripe_price = stripe.Price.create(
-                unit_amount=amount * 100,
-                currency='rub',
-                product=stripe_product.stripe_id,
-            )
-            
-            line_items = {
-                'price': stripe_price.stripe_id,
-                'quantity': 1,
-            }
-            
-            session = stripe.checkout.Session.create(
-                success_url='https://example.com/success',
-                line_items=[
-                    line_items,
-                ],
-                mode='payment',
-            )
-            
-            serializer.save(
-                stripe_payment_id=session.get('id'),
-                stripe_payment_url=session.get('url'),
-                status=session.get('status'),
-                user=self.request.user,
-                method=Payment.TRANSFER,
-            )
+        session = get_session_of_payment(self)
+        save_serializer(self, session, serializer)
 
 
 class PaymentRetrieveAPIView(generics.RetrieveAPIView):
@@ -117,20 +76,12 @@ class PaymentRetrieveAPIView(generics.RetrieveAPIView):
     def get_object(self):
         payment = super().get_object()
         
-        stripe.api_key = os.getenv('STRIPE_TOKEN')
-        stripe_data = stripe.checkout.Session.retrieve(
-            payment.stripe_payment_id,
-        )
+        stripe_data = get_stripe_data(payment)
         
         payment.status = stripe_data.get('status')
         payment.save
         
         return payment
-
-
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
-    permission_classes = [AllowAny]
 
 
 class SubscriptionCreateAPIView(generics.CreateAPIView):
@@ -139,3 +90,8 @@ class SubscriptionCreateAPIView(generics.CreateAPIView):
 
 class SubscriptionDestroyAPIView(generics.DestroyAPIView):
     queryset = Subscription.objects.all()
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+    permission_classes = [AllowAny]
