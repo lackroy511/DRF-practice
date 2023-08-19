@@ -9,8 +9,9 @@ from users.models import Payment
 
 
 def get_session_of_payment(
-        self, success_url: str = 'https://example.com/success',
-) -> stripe.checkout.Session:
+        self,
+        success_url: str = 'https://example.com/success',
+        ) -> stripe.checkout.Session:
 
     stripe.api_key = os.getenv('STRIPE_TOKEN')
 
@@ -21,10 +22,9 @@ def get_session_of_payment(
     payment_obj = get_payment_obj(paid_lesson_id, paid_course_id)
 
     if payment_obj:
+        
         stripe_product = get_product(payment_obj)
-
         stripe_price = get_price(amount, stripe_product)
-
         line_items = get_line_items(stripe_price)
 
     return stripe.checkout.Session.create(
@@ -38,8 +38,7 @@ def get_session_of_payment(
 
 def get_payment_obj(
         paid_lesson_id: int or None,
-        paid_course_id: int or None,
-) -> Course or Lesson or None:
+        paid_course_id: int or None) -> Course or Lesson or None:
 
     if paid_course_id:
         return Course.objects.get(pk=paid_course_id)
@@ -51,16 +50,14 @@ def get_payment_obj(
 
 
 def get_product(
-        payment_obj: Course or Lesson,
-) -> stripe.Product:
+        payment_obj: Course or Lesson) -> stripe.Product:
 
     return stripe.Product.create(name=payment_obj.name)
 
 
 def get_price(
         amount: int,
-        stripe_product: stripe.Product,
-) -> stripe.Price:
+        stripe_product: stripe.Product) -> stripe.Price:
 
     return stripe.Price.create(
         unit_amount=amount * 100,
@@ -71,8 +68,7 @@ def get_price(
 
 def get_line_items(
         stripe_price: stripe.Price,
-        quantity: int = 1,
-) -> dict:
+        quantity: int = 1) -> dict:
 
     return {
         'price': stripe_price.stripe_id,
@@ -83,8 +79,7 @@ def get_line_items(
 def save_serializer(
         self,
         session: stripe.checkout.Session,
-        serializer: serializers,
-) -> None:
+        serializer: serializers) -> None:
 
     serializer.save(
         stripe_payment_id=session.get('id'),
@@ -95,9 +90,9 @@ def save_serializer(
     )
     
 
-def get_stripe_data(payment: Payment):
+def get_payment_info(stripe_payment_id: str) -> None:
     
     stripe.api_key = os.getenv('STRIPE_TOKEN')
     return stripe.checkout.Session.retrieve(
-        payment.stripe_payment_id,
+        stripe_payment_id,
     )

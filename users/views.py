@@ -17,7 +17,7 @@ from users.serializers import (MyTokenObtainPairSerializer,
                                SubscriptionSerializer, UserRetrieveSerializer,
                                UserSerializer)
 from users.services import (get_session_of_payment,
-                            get_stripe_data,
+                            get_payment_info,
                             save_serializer)
 
 
@@ -76,11 +76,11 @@ class PaymentRetrieveAPIView(generics.RetrieveAPIView):
     def get_object(self):
         payment = super().get_object()
         
-        stripe_data = get_stripe_data(payment)
-        
-        payment.status = stripe_data.get('status')
-        payment.save
-        
+        if payment.status != 'complete':
+            stripe_data = get_payment_info(payment.stripe_payment_id)
+            payment.status = stripe_data.get('status')
+            payment.save()
+
         return payment
 
 

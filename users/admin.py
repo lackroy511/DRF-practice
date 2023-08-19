@@ -13,7 +13,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('date_of_payment', 'amount')
+    list_display = ('pk', 'date_of_payment', 'stripe_payment_id', 'amount')
 
 
 @admin.register(Subscription)
