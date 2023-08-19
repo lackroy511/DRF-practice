@@ -19,13 +19,13 @@ def get_session_of_payment(
     paid_lesson_id = self.request.data.get('paid_lesson')
     paid_course_id = self.request.data.get('paid_course')
 
-    payment_obj = get_payment_obj(paid_lesson_id, paid_course_id)
+    payment_obj = get_id_of_payment_obj(paid_lesson_id, paid_course_id)
 
     if payment_obj:
         
-        stripe_product = get_product(payment_obj)
-        stripe_price = get_price(amount, stripe_product)
-        line_items = get_line_items(stripe_price)
+        stripe_product = form_stripe_product(payment_obj)
+        stripe_price = form_stripe_price(amount, stripe_product)
+        line_items = form_line_items(stripe_price)
 
     return stripe.checkout.Session.create(
         success_url=success_url,
@@ -36,26 +36,23 @@ def get_session_of_payment(
     )
 
 
-def get_payment_obj(
+def get_id_of_payment_obj(
         paid_lesson_id: int or None,
         paid_course_id: int or None) -> Course or Lesson or None:
 
     if paid_course_id:
         return Course.objects.get(pk=paid_course_id)
 
-    if paid_lesson_id:
-        return Lesson.objects.get(pk=paid_lesson_id)
-
-    return None
+    return Lesson.objects.get(pk=paid_lesson_id)
 
 
-def get_product(
+def form_stripe_product(
         payment_obj: Course or Lesson) -> stripe.Product:
 
     return stripe.Product.create(name=payment_obj.name)
 
 
-def get_price(
+def form_stripe_price(
         amount: int,
         stripe_product: stripe.Product) -> stripe.Price:
 
@@ -66,7 +63,7 @@ def get_price(
     )
 
 
-def get_line_items(
+def form_line_items(
         stripe_price: stripe.Price,
         quantity: int = 1) -> dict:
 
