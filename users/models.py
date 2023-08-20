@@ -19,6 +19,10 @@ class User(AbstractUser):
     email = models.EmailField(
         unique=True, verbose_name='почта',
     )
+    last_login = models.DateField(
+        auto_now=False, auto_now_add=False, verbose_name='дата последнего входа',
+        null=True, blank=True,
+    )
 
     def __str__(self):
         return f'{self.email}'

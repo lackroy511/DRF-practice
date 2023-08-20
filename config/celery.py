@@ -1,6 +1,9 @@
 from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
+from kombu import Exchange, Queue
+
+broker_connection_retry_on_startup = False
 
 # Установка переменной окружения для настроек проекта
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')

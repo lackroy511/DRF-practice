@@ -4,6 +4,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from users.models import Payment, Subscription, User
 from users.validators import AlreadySubscribedCheck
 
+from datetime import date
+
 
 class PaymentSerializer(serializers.ModelSerializer):
 
@@ -35,7 +37,7 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             'email', 'password', 'first_name', 'last_name', 'is_staff',
-            'is_active', 'date_joined', 'payments',
+            'is_active', 'date_joined', 'last_login', 'payments',
         )
 
     payments = PaymentSerializer(many=True)
@@ -55,8 +57,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls,  user):
         token = super().get_token(user)
-
         token['email'] = user.email
+        
+        user.last_login = date.today()
+        user.save()
 
         return token
 

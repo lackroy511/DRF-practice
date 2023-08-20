@@ -6,6 +6,9 @@ from course.models import Course, Lesson
 from course.pagination import MyPagination
 from course.permissions import CanCreate, IsModerator, IsOwner
 from course.serializers import CourseSerializer, LessonSerializer
+from course.services import get_users_emails_from_subs
+from course.tasks import send_course_update_email
+from users.models import Subscription
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -14,6 +17,14 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+        
+    def update(self, request, *args, **kwargs):
+        
+        subs = Subscription.objects.filter(user=request.user)
+        emails = get_users_emails_from_subs(subs)
+        send_course_update_email.delay(emails)
+        
+        return super().update(request, *args, **kwargs)
 
     def get_queryset(self):
 
