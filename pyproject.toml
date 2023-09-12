@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "djangodrf-project"
+name = "drf-practice"
 version = "0.1.0"
 description = ""
 authors = ["RomanBogdanov <lackroy5111@gmail.com>"]
 readme = "README.md"
-packages = [{include = "djangodrf_project"}]
+packages = [{include = "drf_project"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

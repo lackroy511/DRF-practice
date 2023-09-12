@@ -31,7 +31,10 @@ class CourseViewSet(viewsets.ModelViewSet):
         if self.request.user.groups.filter(name='moderator').exists():
             return Course.objects.all()
 
-        return Course.objects.filter(owner=self.request.user)
+        if self.request.user.is_authenticated:
+            return Course.objects.filter(owner=self.request.user)
+        
+        return None
 
     def get_permissions(self):
 
@@ -52,7 +55,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
 
-    permission_classes = (CanCreate, AllowAny)
+    permission_classes = (CanCreate, IsAuthenticated)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -73,14 +76,17 @@ class LessonListAPIView(generics.ListAPIView):
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = LessonSerializer
 
-    permission_classes = (IsOwner | IsModerator, )
-
+    permission_classes = (IsOwner | IsModerator, IsAuthenticated)
+    
     def get_queryset(self):
 
         if self.request.user.groups.filter(name='moderator').exists():
             return Lesson.objects.all()
 
-        return Lesson.objects.filter(owner=self.request.user)
+        if self.request.user.is_authenticated:
+            return Lesson.objects.filter(owner=self.request.user)
+        
+        return None
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):

@@ -4,6 +4,7 @@ import os
 import stripe
 from django.shortcuts import redirect
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import generics
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import AllowAny
@@ -34,18 +35,22 @@ class UserCreateAPIView(generics.CreateAPIView):
 
 class UserUpdateAPIView(generics.UpdateAPIView):
 
+    serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = (IsCurrentUser, )
+    permission_classes = (IsCurrentUser, IsAuthenticated)
 
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
 
     # serializer_class = UserRetrieveSerializer
     queryset = User.objects.all()
+    
 
     def get_serializer_class(self):
-        if self.request.user == self.get_object():
-            return UserRetrieveSerializer
+        
+        if self.request.user.is_authenticated:
+            if self.request.user == self.get_object():
+                return UserRetrieveSerializer
 
         return OtherUserRetrieveSerializer
 
