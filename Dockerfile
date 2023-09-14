@@ -9,7 +9,3 @@ RUN pip install poetry && poetry config virtualenvs.create false && poetry insta
 COPY . /code/ 
 
 ENV PATH="/code/.poetry/bin:$PATH"
-
-RUN poetry shell
-
-CMD ["python", "manage.py", "runserver"]
